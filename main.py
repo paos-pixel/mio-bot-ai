@@ -34,7 +34,7 @@ def keep_alive():
 
 # --- FUNZIONI DEL BOT ---
 async def start(update: Update, context: ContextTypes.DEFAULT_TYPE):
-    await context.bot.send_message(chat_id=update.effective_chat.id, text="Ciao! Sono online e pronto.")
+    await context.bot.send_message(chat_id=update.effective_chat.id, text="bot pronto!")
 
 async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
     user_text = update.message.text
@@ -47,8 +47,10 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE):
         response = await model.generate_content_async(user_text)
         await context.bot.send_message(chat_id=chat_id, text=response.text)
     except Exception as e:
-        print(f"Errore: {e}")
-        await context.bot.send_message(chat_id=chat_id, text="Mi dispiace, si è verificato un errore.")
+        # Invece di stampare solo nel log, mandiamo l'errore in chat
+        error_msg = f"⚠️ ERRORE TECNICO:\n{str(e)}"
+        print(error_msg) 
+        await context.bot.send_message(chat_id=chat_id, text=error_msg)
 
 # --- AVVIO ---
 if __name__ == '__main__':
